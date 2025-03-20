@@ -1,0 +1,5 @@
+.h-fix {
+    height: 200px;  /* Set your preferred height */
+    object-fit: cover; /* Ensures the image fills the area without distortion */
+    width: 100%; /* Ensures the width stays consistent */
+}
