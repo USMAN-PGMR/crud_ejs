@@ -20,12 +20,17 @@
                 <% users.forEach(function(user){ %>
                     <div class="col-12 col-md-6 col-lg-3">
                         <div class="card p-2 my-2 shadow border-0">
-                            <img src="<%=user.imageUrl%>" class="w-100 h-fix" alt="User Image">
-                            <h3><%=user.name%></h3>
-                            <h6 class="text-secondary"><%=user.email%></h6>
+                            <img src="<%=user.imageUrl%>" class="w-100 h-fix user-img" alt="User Image">
+                            <h3 class="user-name"><%=user.name%></h3>
+                            <h6 class="text-secondary user-email"><%=user.email%></h6>
                             <div class="row pt-3">
                                 <div class="d-flex justify-content-between">
-                                    <a class="text-start btn text-primary" href="">Edit</a>  
+                                    <button class="text-start btn text-primary edit-btn" 
+                                        data-bs-toggle="modal" data-bs-target="#editModal"
+                                        data-id="<%=user._id%>"
+                                        data-name="<%=user.name%>"
+                                        data-email="<%=user.email%>"
+                                        data-image="<%=user.imageUrl%>">Edit</button>  
                                     <a class="text-end btn text-danger pe-2" href="/delete/<%=user._id%>">Delete</a>
                                 </div>
                             </div>
@@ -39,6 +44,66 @@
             <% } %>
         </div>
         
+        <!-- 🔹 Bootstrap Modal for Edit -->
+        <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editModalLabel">Edit User</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="/updateUser" method="POST">
+                            <input type="hidden" name="id" id="edit-user-id">
+                            
+                            <!-- 🔹 Image Preview -->
+                            <div class="text-center">
+                                <img id="edit-user-img-preview" src="" class="img-fluid rounded mb-3" width="150" alt="User Image">
+                            </div>
+        
+                            <div class="mb-3">
+                                <label class="form-label">Name</label>
+                                <input type="text" class="form-control" id="edit-user-name" name="name" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Email</label>
+                                <input type="email" class="form-control" id="edit-user-email" name="email" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Image URL</label>
+                                <input type="text" class="form-control" id="edit-user-image" name="imageUrl" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">Update User</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const editButtons = document.querySelectorAll(".edit-btn");
+                
+                editButtons.forEach(button => {
+                    button.addEventListener("click", function () {
+                        const userId = this.getAttribute("data-id");
+                        const userName = this.getAttribute("data-name");
+                        const userEmail = this.getAttribute("data-email");
+                        const userImage = this.getAttribute("data-image");
+        
+                        document.getElementById("edit-user-id").value = userId;
+                        document.getElementById("edit-user-name").value = userName;
+                        document.getElementById("edit-user-email").value = userEmail;
+                        document.getElementById("edit-user-image").value = userImage;
+                        document.getElementById("edit-user-img-preview").src = userImage;
+                    });
+                });
+            });
+        </script>
+        
+        
+        
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
